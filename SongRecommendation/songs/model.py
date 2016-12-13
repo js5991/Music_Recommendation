@@ -9,6 +9,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.tree import DecisionTreeClassifier
 
 import sys
+import path
 
 class song(object):
     '''
@@ -25,6 +26,7 @@ class song(object):
         self.Xtrain=self.data[:numSongs]
         self.data=self.data[numSongs:]
         self.model=None 
+
         
         i=0
         while (i<numSongs) or len(np.unique(self.Ytrain))<2:
@@ -62,7 +64,7 @@ class song(object):
         self.model = self.model.fit(self.Xtrain.drop(self.textCol,axis=1),self.Ytrain)
         self.data['Ypredict']=self.model.predict_proba(self.data.drop(self.textCol,axis=1))[:,1]
         
-    def featureImportance(self):
+    def featureImportance(self, path=None):
         featureImportance=self.model.feature_importances_
         columns=self.Xtrain.drop(self.textCol,axis=1).columns.values
         stack=np.column_stack([columns, featureImportance])
@@ -80,7 +82,11 @@ class song(object):
             ax.set_xticklabels(topRankNonZero[:,0], rotation = 25)
             plt.title('Features contribute most to your music preference')
             ax.set_ylabel('Normalized Feature Importance')
-            plt.show()
+            
+            if path!=None:
+                plt.savefig(path)
+            else:
+                plt.show()
         
     
     def targetValue(self, x):
@@ -90,7 +96,10 @@ class song(object):
                 inputstr=input("The song we recommended for you is Title: "+str(x["title_x"])+", Artist: "+str(x["artist_name"])+"\n Please enter 1 if you like it, otherwise enter 0.")
                 if (inputstr=="quit"):
                     print("Thank you for using our song recommendation system. Here is the list of important features contributing to your sound preference.")
-                    self.featureImportance()
+                    if len(self.Ytrain)>1 and self.model!=None:
+                        self.featureImportance()
+                        path=input("Where do you want to save your customized important feature list?")
+                        self.featureImportance(path)
                     sys.exit(1)
                 y=int(inputstr)
                 if (y!=0 and y!=1):
@@ -99,14 +108,14 @@ class song(object):
                     self.Ytrain.append(y)
                     print (" \n")
                 break
-            except ValueError:
-                print("Error")
+            except ValueError as msg:
+                print (msg)
             except KeyboardInterrupt:
                 sys.exit(1)
             except SystemExit:
                 sys.exit()
-            except:
-                print ("There is an error. "+"The song we recommended for you is "+str(x["title_x"])+"\n Please enter 1 if you like it, otherwise enter 0")
+            #except:
+               # print ("There is an error. "+"The song we recommended for you is "+str(x["title_x"])+"\n Please enter 1 if you like it, otherwise enter 0")
        
 
 
