@@ -14,6 +14,7 @@ if __name__ == '__main__':
     warnings.filterwarnings("ignore")
     
     try:
+        print ("Sounds loading...")
         data=pd.read_csv("featureSelectedData.csv", index_col=0,sep=",", encoding="ISO-8859-1")
     except IOError:
         print ("Cannot read the file")

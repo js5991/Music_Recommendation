@@ -100,6 +100,7 @@ class song(object):
                         self.featureImportance()
                         path=input("Where do you want to save your customized important feature list?")
                         self.featureImportance(path)
+                        print ("The customized important feature is saved.")
                     sys.exit(1)
                 y=int(inputstr)
                 if (y!=0 and y!=1):
