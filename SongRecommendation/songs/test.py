@@ -1,4 +1,5 @@
 from . import featureSelection, model
+from unittest.mock import patch
 import unittest
 import os.path
 import pandas as pd
@@ -55,11 +56,19 @@ class Test(unittest.TestCase):
         """
         Unit test for the constructor of Song class
         """
-        temp_test_data = pd.read_csv('test_feature_selected_data.csv', index_col=0)
+        temp_test_data = pd.read_csv('test_data_for_song.csv', index_col=0, encoding='windows-1252')
         test_data = model.Song(temp_test_data)
         self.assertEqual(test_data.textCol, ['artist_name', 'release', 'title_x', 'tags'])
+        self.assertTrue(test_data.data['song_hotttnesss'].iloc[1] >= test_data.data['song_hotttnesss'].iloc[2])
+        self.assertEqual(test_data.Xtrain.shape[0], 5)
+        self.assertEqual(test_data.data.shape[0], 7)
 
-
+    def test_targetValue(self):
+        temp_test_data = pd.read_csv('test_data_for_song.csv', index_col=0, encoding='windows-1252')
+        test_data = model.Song(temp_test_data, 1)
+        test_data.targetValue(test_data.Xtrain)
+        with patch('builtins.input', return_value='1'):
+            assert test_data.Ytrain[0] == '1'
 
 
 
