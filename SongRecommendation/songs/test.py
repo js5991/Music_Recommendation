@@ -1,4 +1,4 @@
-from . import featureSelection
+from . import featureSelection, model
 import unittest
 import os.path
 import pandas as pd
@@ -55,6 +55,10 @@ class Test(unittest.TestCase):
         """
         Unit test for the constructor of Song class
         """
+        temp_test_data = pd.read_csv('test_feature_selected_data.csv', index_col=0)
+        test_data = model.Song(temp_test_data)
+        self.assertEqual(test_data.textCol, ['artist_name', 'release', 'title_x', 'tags'])
+
 
 
 
