@@ -1,7 +1,7 @@
 '''
 Created on Dec 4, 2016
-
-@author: Jingyi Su
+@ProjectTitle: Song Recommendation
+@author: Jingyi Su(js5991)， Qianyu Cheng(qc510), Luyu Jin(lj1035)
 '''
 import numpy as np
 import matplotlib.pyplot as plt

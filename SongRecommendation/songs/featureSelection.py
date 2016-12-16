@@ -1,7 +1,7 @@
 '''
-Created on Dec 11, 2016
-
-@author: Jingyi Su
+Created on Dec 4, 2016
+@ProjectTitle: Song Recommendation
+@author: Jingyi Su(js5991)， Qianyu Cheng(qc510), Luyu Jin(lj1035)
 '''
 import pandas as pd
 import sys

@@ -1,3 +1,9 @@
+'''
+Created on Dec 4, 2016
+@ProjectTitle: Song Recommendation
+@author: Jingyi Su(js5991)， Qianyu Cheng(qc510), Luyu Jin(lj1035)
+'''
+
 class InvalidInputError(Exception):
     """
     This InvalidInputError class extends from the Extension class.
