@@ -63,12 +63,26 @@ class Test(unittest.TestCase):
         self.assertEqual(test_data.Xtrain.shape[0], 5)
         self.assertEqual(test_data.data.shape[0], 7)
 
-    def test_targetValue(self):
+    #def test_lrModel(self):
+    #    temp_test_data = pd.read_csv('test_data_for_song.csv', index_col=0, encoding='windows-1252')
+    #    test_data = model.Song(temp_test_data)
+    #    self.assertFalse('Ypredict' in test_data.data.columns)
+    #    test_data.lrModel()
+    #    self.assertTrue('Ypredict' in test_data.data.columns)
+
+    def test_decisionTreeModel(self):
         temp_test_data = pd.read_csv('test_data_for_song.csv', index_col=0, encoding='windows-1252')
-        test_data = model.Song(temp_test_data, 1)
-        test_data.targetValue(test_data.Xtrain)
-        with patch('builtins.input', return_value='1'):
-            assert test_data.Ytrain[0] == '1'
+        test_data = model.Song(temp_test_data)
+        self.assertFalse('Ypredict' in test_data.data.columns)
+        test_data.decisionTreeModel()
+        self.assertTrue('Ypredict' in test_data.data.columns)
+
+    #def test_targetValue(self):
+    #    temp_test_data = pd.read_csv('test_data_for_song.csv', index_col=0, encoding='windows-1252')
+    #   test_data = model.Song(temp_test_data, 1)
+    #    test_data.targetValue(test_data.Xtrain)
+    #    with patch('builtins.input', return_value='1'):
+    #        assert test_data.Ytrain[0] == '1'
 
 
 
