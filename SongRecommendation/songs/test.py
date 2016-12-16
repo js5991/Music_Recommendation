@@ -51,6 +51,11 @@ class Test(unittest.TestCase):
         test_data.to_csv_file('test_feature_selected_data.csv')
         self.assertTrue(os.path.isfile('test_feature_selected_data.csv'))
 
+    def test_song_init(self):
+        """
+        Unit test for the constructor of Song class
+        """
+
 
 
 

@@ -48,7 +48,7 @@ class Song(object):
                 self.data = self.data[1:]
             # The targetValue of the song would be from the user input: which is 0 or 1.
             self.targetValue(self.Xtrain.iloc[i])
-            i = i+1
+            i=i+1
 
         # Using Xtrain and Ytrain (which is the targetValue from user) in decisionTreeModel
         self.decisionTreeModel()
