@@ -7,8 +7,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.linear_model import LogisticRegression
 from sklearn.tree import DecisionTreeClassifier
-
 import sys
+from . import myexception
 
 class Song(object):
     """
@@ -51,7 +51,6 @@ class Song(object):
 
         # Using Xtrain and Ytrain (which is the targetValue from user) in decisionTreeModel
         self.decisionTreeModel()
-        
 
     def songRecommendation(self, numSongs=5):
         """
@@ -122,7 +121,6 @@ class Song(object):
                 plt.savefig(path)
             else:
                 plt.show()
-        
     
     def targetValue(self, x):
         """
@@ -143,21 +141,14 @@ class Song(object):
                     sys.exit(1)
                 y=int(inputstr)
                 if (y!=0 and y!=1):
-                    raise ValueError ("Need a value of 1 or 0") 
+                    raise myexception.InvalidInputError()
                 else:
                     self.Ytrain.append(y)
-                    print (" \n")
+                    print(" \n")
                 break
-            except ValueError as msg:
-                print (msg)
+            except myexception.InvalidInputError as e:
+                print(e)
             except KeyboardInterrupt:
                 sys.exit(1)
             except SystemExit:
                 sys.exit()
-            #except:
-               # print ("There is an error. "+"The song we recommended for you is "+str(x["title_x"])+"\n Please enter 1 if you like it, otherwise enter 0")
-       
-
-
-
-        
