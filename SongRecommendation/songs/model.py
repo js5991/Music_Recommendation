@@ -33,29 +33,38 @@ class Song(object):
         # Xtrain data are the first several songs in the data in descending order
         self.Xtrain = self.data[:num_songs]
 
-        # The data that have other songs
+        # Update self data to be data no used in Xtrain
         self.data = self.data[num_songs:]
         self.model = None
-        # Wrote a while loop that break when number of songs recommend is larger than num_songs,
-        # or the users like all the songs or dislike all the songs.
+        self.num_songs=num_songs
+	
+    def songRecommendationInitial(self):
+        """
+        Function that recommends the initial song list to the user, asks for user preference for each song and calls the decisionTree model. 
+		The function will keep asking for user inputs until number of songs recommended is larger than num_songs,
+		and there are like and dislike from users preference.
+        """		
+		
+        # Wrote a while loop that break when number of songs recommended is larger than num_songs,
+        # and there are like and dislike from users preference.
         # (Since only with 0,1 would the decision tree be able to classify)
         
         i = 0
-        while (i < num_songs) or len(np.unique(self.Ytrain)) < 2:
+        while (i < self.num_songs) or len(np.unique(self.Ytrain)) < 2:
             # Xtrain append one more recommended song from data.
-            if i >= num_songs:
+            if i >= self.num_songs:
                 self.Xtrain = self.Xtrain.append(self.data[:1])
                 self.data = self.data[1:]
             # The targetValue of the song would be from the user input: which is 0 or 1.
             self.targetValue(self.Xtrain.iloc[i])
             i=i+1
-
+			
         # Using Xtrain and Ytrain (which is the targetValue from user) in decisionTreeModel
         self.decisionTreeModel()
 
     def songRecommendation(self, num_songs=5):
         """
-        Function that recommend songs to user
+        Function that recommends songs to user
         :param num_songs: default number of songs is 5.
         :return: targetValue
         """
