@@ -4,7 +4,7 @@ Created on Dec 4, 2016
 @author: Jingyi Su
 '''
 
-from songs.model import song
+from songs import model
 import sys
 import pandas as pd
 import warnings
@@ -35,7 +35,7 @@ if __name__ == '__main__':
     # Print a description that explains how song recommendation system work.
     print("This is a concurrent song recommendation system from our music base. We are looking forward to hearing from you on whether you like the recommended song or not.\n"+"The system will be retrained after each song based on your preference. We strongly hope you stay in tune for the first few songs and your next favorite songs will be coming soon.")
     # Build a song class that recommends 20 songs to the user.
-    songRecommend=song(data,20)
+    songRecommend = model.Song(data,20)
 
     # Main program that recommends a new song to the users.
     while True:

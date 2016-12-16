@@ -9,62 +9,97 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.tree import DecisionTreeClassifier
 
 import sys
-import path
 
-class song(object):
-    '''
-    classdocs
-    '''
+class Song(object):
+    """
+    This class returns an object of the song class.
+    """
     def __init__(self, data, numSongs=5):
-        '''
-        Constructor
-        '''
+        """
+        :param data: the featureSelection data input
+        :param numSongs: default number of recommended song is 5.
+        """
         self.Ytrain=[]
         self.data=data
-        self.textCol=['artist_name','release','title_x','tags']
-        self.data.sort('song_hotttnesss',ascending=False, inplace=True)
-        self.Xtrain=self.data[:numSongs]
-        self.data=self.data[numSongs:]
-        self.model=None 
 
+        # TextCol are the columns that have text data.
+        self.textCol=['artist_name','release','title_x','tags']
+
+        # We first sort the data with song_hotttness, so that the users of the recommendation program will
+        # know the first several songs we recommend.
+        self.data.sort('song_hotttnesss',ascending=False, inplace=True)
+
+        # Xtrain data are the first several songs in the data in descending order
+        self.Xtrain=self.data[:numSongs]
+
+        # The data that have other songs
+        self.data=self.data[numSongs:]
+        self.model=None
+        # Wrote a while loop that break when number of songs recommend is larger than numSongs,
+        # or the users like all the songs or dislike all the songs.
+        # (Since only with 0,1 would the decision tree be able to classify)
         
         i=0
         while (i<numSongs) or len(np.unique(self.Ytrain))<2:
+            # Xtrain append one more recommended song from data.
             if i>=numSongs:
                 self.Xtrain=self.Xtrain.append(self.data[:1])
                 self.data=self.data[1:]
+            # The targetValue of the song would be from the user input: which is 0 or 1.
             self.targetValue(self.Xtrain.iloc[i])
             i=i+1
 
-        #self.lrModel()
+        # Using Xtrain and Ytrain (which is the targetValue from user) in decisionTreeModel
         self.decisionTreeModel()
         
 
     def songRecommendation(self, numSongs=5):
+        """
+        Function that recommend songs to user
+        :param numSongs: default number of songs is 5.
+        :return:
+        """
+        # Using the decision tree model, sort the predict probability in descending order
         self.data.sort('Ypredict',ascending=False, inplace=True)
-        #print(self.data['Ypredict'])
+
+        # Since we only need the Xtrian, drop Ypredict first.
         x=self.data[:numSongs].drop('Ypredict',axis=1)
+
+        # data are the songs that have not been recommended before.
         self.data=self.data[numSongs:]
+
+        # Append recommend songs x to Xtrain.
         self.Xtrain=self.Xtrain.append(x)
-                
+
+        # For each song in number of songs, find targetValue of the song from user.
         for i in range(numSongs):
-            self.targetValue(x.iloc[i])   
-        
+            self.targetValue(x.iloc[i])
+
+        # Drop Ypredict and run a decision Tree model.
         self.data=self.data.drop('Ypredict',axis=1)
-        #self.lrModel()    
         self.decisionTreeModel()
     
     def lrModel(self):
+        """
+        Logistic regression model that takes in Xtrain and return a column 'Ypredict' to be predicted value.
+        """
         lrmodel=LogisticRegression()
         lrmodel.fit(self.Xtrain.drop(self.textCol,axis=1),self.Ytrain)
         self.data['Ypredict']=lrmodel.predict_proba(self.data.drop(self.textCol,axis=1))[:,1]
     
     def decisionTreeModel(self):
+        """
+        Decision Tree model that takes in Xtrain and return a column 'Ypredict' to be predicted value.
+        """
         self.model = DecisionTreeClassifier(criterion='entropy', min_samples_leaf = 1, max_depth = 3)
         self.model = self.model.fit(self.Xtrain.drop(self.textCol,axis=1),self.Ytrain)
         self.data['Ypredict']=self.model.predict_proba(self.data.drop(self.textCol,axis=1))[:,1]
         
     def featureImportance(self, path=None):
+        """
+        Function that return a plot using decision tree's feature importances:
+        show the bar plot of the top ranked features in terms of importances.
+        """
         featureImportance=self.model.feature_importances_
         columns=self.Xtrain.drop(self.textCol,axis=1).columns.values
         stack=np.column_stack([columns, featureImportance])
@@ -90,6 +125,10 @@ class song(object):
         
     
     def targetValue(self, x):
+        """
+        :param x: Xtrain that have all songs data.
+        :return: User input of 0 or 1: dislike or like for certain song.
+        """
         while True:
             try:
                 
