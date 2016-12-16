@@ -1,5 +1,4 @@
-from . import featureSelection, model
-from unittest.mock import patch
+from . import featureSelection, model, myexception
 import unittest
 import os.path
 import pandas as pd
@@ -63,26 +62,48 @@ class Test(unittest.TestCase):
         self.assertEqual(test_data.Xtrain.shape[0], 5)
         self.assertEqual(test_data.data.shape[0], 7)
 
-    #def test_lrModel(self):
-    #    temp_test_data = pd.read_csv('test_data_for_song.csv', index_col=0, encoding='windows-1252')
-    #    test_data = model.Song(temp_test_data)
-    #    self.assertFalse('Ypredict' in test_data.data.columns)
-    #    test_data.lrModel()
-    #    self.assertTrue('Ypredict' in test_data.data.columns)
-
-    def test_decisionTreeModel(self):
+    def test_lrModel(self):
+        """
+        Unit test for the lrModel function of Song class
+        """
         temp_test_data = pd.read_csv('test_data_for_song.csv', index_col=0, encoding='windows-1252')
         test_data = model.Song(temp_test_data)
         self.assertFalse('Ypredict' in test_data.data.columns)
+        test_data.Ytrain = [1, 0, 0, 1, 1]
+        test_data.lrModel()
+        self.assertTrue('Ypredict' in test_data.data.columns)
+
+    def test_decisionTreeModel(self):
+        """
+        Unit test for the decisionTreeModel function of Song class
+        """
+        temp_test_data = pd.read_csv('test_data_for_song.csv', index_col=0, encoding='windows-1252')
+        test_data = model.Song(temp_test_data)
+        self.assertFalse('Ypredict' in test_data.data.columns)
+        test_data.Ytrain = [1, 0, 0, 1, 1]
         test_data.decisionTreeModel()
         self.assertTrue('Ypredict' in test_data.data.columns)
 
-    #def test_targetValue(self):
-    #    temp_test_data = pd.read_csv('test_data_for_song.csv', index_col=0, encoding='windows-1252')
-    #   test_data = model.Song(temp_test_data, 1)
-    #    test_data.targetValue(test_data.Xtrain)
-    #    with patch('builtins.input', return_value='1'):
-    #        assert test_data.Ytrain[0] == '1'
+    def test_featureSelection(self):
+        """
+        Unit test for the featureSelection function of Song class
+        """
+        temp_test_data = pd.read_csv('test_data_for_song.csv', index_col=0, encoding='windows-1252')
+        test_data = model.Song(temp_test_data)
+        test_data.Ytrain = [1, 0, 0, 1, 1]
+        test_data.decisionTreeModel()
+        self.assertTrue(test_data.model.feature_importances_ != None)
+
+    def test_ytrainFromUser(self):
+        """
+        Unit test for the ytrainFromUser function of Song class
+        """
+        temp_test_data = pd.read_csv('test_data_for_song.csv', index_col=0, encoding='windows-1252')
+        test_data = model.Song(temp_test_data)
+        with self.assertRaises(myexception.InvalidInputError):
+            test_data.ytrainFromUser('foo')
+        with self.assertRaises(myexception.InvalidInputError):
+            test_data.ytrainFromUser('1.1')
 
 
 

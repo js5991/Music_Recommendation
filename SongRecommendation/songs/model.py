@@ -138,22 +138,10 @@ class Song(object):
         """
         while True:
             try:
-                
-                inputstr=input("The song we recommended for you is Title: "+str(x["title_x"])+", Artist: "+str(x["artist_name"])+"\n Please enter 1 if you like it, otherwise enter 0.")
-                if (inputstr == "quit"):
-                    print("Thank you for using our song recommendation system. Here is the list of important features contributing to your sound preference.")
-                    if len(self.Ytrain)>1 and self.model!=None:
-                        self.featureImportance()
-                        path=input("Where do you want to save your customized important feature list?")
-                        self.featureImportance(path)
-                        print("The customized important feature is saved.")
-                    sys.exit(1)
-                y=int(inputstr)
-                if (y!=0 and y!=1):
-                    raise myexception.InvalidInputError()
-                else:
-                    self.Ytrain.append(y)
-                    print(" \n")
+                input_str=input("The song we recommended for you is Title: "+str(x["title_x"])+", Artist: "+str(x["artist_name"])+"\n Please enter 1 if you like it, otherwise enter 0.")
+                if input_str == "quit":
+                    self.user_quit()
+                self.ytrainFromUser(input_str)
                 break
             except myexception.InvalidInputError as e:
                 print(e)
@@ -161,3 +149,35 @@ class Song(object):
                 sys.exit(1)
             except SystemExit:
                 sys.exit()
+
+    def user_quit(self):
+        """
+        This function executes user-directed quit. If model is run, then the feature importance plot will be shown.
+        The user will enter where to save the plot after closing the figure.
+        """
+        try:
+            print("Thank you for using our song recommendation system.")
+            if len(self.Ytrain) > 1 and self.model != None:
+                print("Printing the list of important features contributing to your sound preference. Please wait and take a look at windows pop-up.")
+                self.featureImportance()
+                path = input("Where do you want to save your customized important feature list?")
+                self.featureImportance(path)
+                print("The customized important feature is saved.")
+            sys.exit(1)
+        except KeyboardInterrupt:
+            sys.exit(1)
+        except SystemExit:
+            sys.exit()
+
+    def ytrainFromUser(self, y):
+        """
+        This function takes y (i.e. user input) as an argument and user preference of the song will be recorded.
+        """
+        try:
+            y = int(y)
+        except:
+            raise myexception.InvalidInputError()
+        if y != 0 and y != 1:
+            raise myexception.InvalidInputError()
+        else:
+            self.Ytrain.append(y)
