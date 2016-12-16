@@ -8,6 +8,9 @@ from . import datapreprocessing
 # Also, we only use a small portion of all datafiles to run the unit test. Otherwise, it will take hours...
 
 class Test(unittest.TestCase):
+    """
+    This is the class for unit tests. 
+    """
 
     def test_dataconverter_init(self):
         """
@@ -19,7 +22,7 @@ class Test(unittest.TestCase):
 
     def test_read_h5(self):
         """
-        Unit test for the read_h5 method in DataConverter class
+        Unit test for the read_h5 function in DataConverter class
         """
         test_data = datapreprocessing.DataConverter('../MillionSongSubset/data/A/A/A', '../lastfm_subset/A/A/A')
         test_data_df = test_data.read_h5()
@@ -29,7 +32,7 @@ class Test(unittest.TestCase):
 
     def test_add_tags_columns(self):
         """
-        Unit test for the add_tags_columns method in DataConverter class
+        Unit test for the add_tags_columns function in DataConverter class
         """
         test_data = datapreprocessing.DataConverter('../MillionSongSubset/data/A/A/A', '../lastfm_subset/A/A/A')
         test_data_df = test_data.read_json()
@@ -38,7 +41,7 @@ class Test(unittest.TestCase):
 
     def test_read_json(self):
         """
-        Unit test for the read_json method in DataConverter class
+        Unit test for the read_json function in DataConverter class
         """
         test_data = datapreprocessing.DataConverter('../MillionSongSubset/data/A/A/A', '../lastfm_subset/A/A/A')
         test_data_df = test_data.read_json()
@@ -48,7 +51,7 @@ class Test(unittest.TestCase):
 
     def test_merge_df(self):
         """
-        Unit test for the merge_df method in DataConverter class
+        Unit test for the merge_df function in DataConverter class
         """
         test_data = datapreprocessing.DataConverter('../MillionSongSubset/data/A/A/A', '../lastfm_subset/A/A/A')
         test_data_df = test_data.merge_df()
@@ -58,7 +61,7 @@ class Test(unittest.TestCase):
 
     def test_dataconverter_save_to_csv(self):
         """
-        Unit test for the save_to_csv method in DataConverter class
+        Unit test for the save_to_csv function in DataConverter class
         """
         test_data = datapreprocessing.DataConverter('../MillionSongSubset/data/A/A/A', '../lastfm_subset/A/A/A')
         test_data.save_to_csv('test_data.csv')
@@ -76,7 +79,7 @@ class Test(unittest.TestCase):
 
     def test_drop_missing_values(self):
         """
-        Unit test for the drop_missing_values method in DataClean class
+        Unit test for the drop_missing_values function in DataClean class
         """
         temp_test_data = pd.read_csv('test_data.csv', index_col=0)
         test_data = datapreprocessing.DataClean(temp_test_data)
@@ -86,7 +89,7 @@ class Test(unittest.TestCase):
 
     def test_remove_columns(self):
         """
-        Unit test for the remove_columns method in DataClean class
+        Unit test for the remove_columns function in DataClean class
         """
         temp_test_data = pd.read_csv('test_data.csv', index_col=0)
         test_data = datapreprocessing.DataClean(temp_test_data)
@@ -101,7 +104,7 @@ class Test(unittest.TestCase):
 
     def test_fill_missing_values(self):
         """
-        Unit test for the fill_missing_values method in DataClean class
+        Unit test for the fill_missing_values function in DataClean class
         """
         temp_test_data = pd.read_csv('test_data.csv', index_col=0)
         test_data = datapreprocessing.DataClean(temp_test_data)
@@ -110,7 +113,7 @@ class Test(unittest.TestCase):
 
     def test_delete_songs(self):
         """
-        Unit test for the delete_songs method in DataClean class
+        Unit test for the delete_songs function in DataClean class
         """
         temp_test_data = pd.read_csv('test_data.csv', index_col=0)
         test_data = datapreprocessing.DataClean(temp_test_data)
@@ -120,7 +123,7 @@ class Test(unittest.TestCase):
 
     def test_dataclean_save_to_csv(self):
         """
-        Unit test for the save_to_csv method in DataClean class
+        Unit test for the save_to_csv function in DataClean class
         """
         temp_test_data = pd.read_csv('test_data.csv', index_col=0)
         test_data = datapreprocessing.DataClean(temp_test_data)
